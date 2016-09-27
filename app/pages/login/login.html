@@ -1,0 +1,22 @@
+<!--
+  Created by draconian00@gmail.com / 2016.09.25
+  로그인 및 인앱브라우저 런치 페이지
+-->
+<ion-content padding class="login">
+  <center>
+    <img id="logo" src="images/logo_wh_lg.png">
+
+    <ion-list id="form_list">
+      <ion-item id="item_email">
+        <ion-label fixed>Email</ion-label>
+        <ion-input type="text" value="" [(ngModel)]="email"></ion-input>
+      </ion-item>
+      <ion-item id="item_password">
+        <ion-label fixed>Password</ion-label>
+        <ion-input type="password" value="" [(ngModel)]="password"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <button full (click)="submit()" id="login_btn">로그인</button>
+  </center>
+</ion-content>
