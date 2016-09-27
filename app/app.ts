@@ -22,6 +22,36 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
+
+      var notificationHandler = function(notification) {
+        console.log('didReceiveRemoteNotifiactionCallBack: ' + JSON.stringify(notification));
+        let jsonData = notification.additionalData;
+        if (jsonData.title === 'SYSTEM' && jsonData.autoLogin === 'disabled') {
+          let db = new SQLite();
+          db.openDatabase({
+            name: 'gangmom.db',
+            location: 'default'
+          }).then(() => {
+            db.executeSql('DELETE FROM user', []).then(
+              () => console.log('DELETE success'),
+              (err) => console.error('DELETE ERROR', err)
+            );
+          });
+        }
+      };
+
+      window['plugins'].OneSignal.enableInAppAlertNotification(true);
+      window['plugins'].OneSignal.enableSound(true);
+      window['plugins'].OneSignal.enableVibrate(true);
+      window['plugins'].OneSignal.setSubscription(true);
+      window['plugins'].OneSignal.enableInAppAlertNotification(true);
+      window['plugins'].OneSignal.enableNotificationsWhenActive(true);
+
+      window['plugins'].OneSignal.init(
+        '5db18f75-1e72-486d-a0db-82f902784dea', 
+        {googleProjectNumber: '600441567099'},
+        notificationHandler
+      );
     });
   }
 }

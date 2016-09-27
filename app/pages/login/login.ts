@@ -21,7 +21,7 @@ export class LoginPage {
   email: string;
   password: string;
   os: any;
-  device_token: any;
+  deviceToken: any;
 
   constructor(public navCtrl: NavController, private http: Http) {
     setTimeout(() => {
@@ -54,8 +54,8 @@ export class LoginPage {
           this.email = data.rows.item(0).email;
           this.password = data.rows.item(0).password;
 
-          this.submit();
-          Toast.show(this.email + ' 아이디로 로그인 되었습니다.', '3000', 'bottom').subscribe(
+          this.check();
+          Toast.show(this.email + '\r아이디로 로그인 되었습니다.', '3000', 'bottom').subscribe(
             toast => {
               console.log(toast);
             }
@@ -90,15 +90,15 @@ export class LoginPage {
   }
 
   insertUser() {
-    this.db.executeSql('INSERT INTO user (email, password, deviceToken) VALUES ("' + this.email + '", "' + this.password + '", "' + this.device_token + '")', []).then(
-      () => console.log('INSERT success', this.email, this.password, this.device_token),
+    this.db.executeSql('INSERT INTO user (email, password, deviceToken) VALUES ("' + this.email + '", "' + this.password + '", "' + this.deviceToken + '")', []).then(
+      () => console.log('INSERT success', this.email, this.password, this.deviceToken),
       (err) => console.error('INSERT ERROR', err)
     );
   }
 
   updateUser() {
-    this.db.executeSql('UPDATE user SET email = "' + this.email + '", password = "' + this.password + '", deviceToken = "" WHERE email = "' + this.device_token + '"', []).then(
-      () => console.log('UPDATE success', this.email, this.password, this.device_token),
+    this.db.executeSql('UPDATE user SET email = "' + this.email + '", password = "' + this.password + '", deviceToken = "" WHERE email = "' + this.deviceToken + '"', []).then(
+      () => console.log('UPDATE success', this.email, this.password, this.deviceToken),
       (err) => console.error(err)
     );
   }
@@ -111,14 +111,7 @@ export class LoginPage {
             console.log(res.result);
             this.localUserCheck();
             // open rails page with InAppBrowser.
-            // let url = 'http://gangmom.kr/ionic_login?email=' + this.email + '&password=' +this.password;
-
-            // 로컬 테스트용 임시 코드
-            let url = 'http://localhost:3000/ionic_login?email=' + this.email + '&password=' + this.password;
-            if (this.os === 'Android') {
-              url = 'http://10.0.2.2:3000/ionic_login?email=' + this.email + '&password=' + this.password;
-            }
-            // 임시 코드 END
+            let url = 'http://gangmom.kr/ionic_login?email=' + this.email + '&password=' + this.password;
 
             // launch InAppBrowser
             InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no,clearcache=yes,clearsessioncache=yes');
@@ -130,24 +123,20 @@ export class LoginPage {
 
   check() {
     console.log(this.os);
+    window['plugins'].OneSignal.getIds((ids) => {
+      this.deviceToken = ids.userId;
+    });
 
     // access to rails api
 
     // production
-    // let url = 'http://gangmom.kr/ionic_check';
-
-    // 로컬 테스트용 임시 코드
-    let url = 'http://localhost:3000/ionic_check';
-    if (this.os === 'Android') {
-      url = 'http://10.0.2.2:3000/ionic_check';
-    }
-    // 임시 코드 END
+    let url = 'http://gangmom.kr/ionic_check';
 
     // POST parameters
     let data = {
       'email': this.email,
       'password': this.password,
-      'device_token': this.device_token
+      'deviceToken': this.deviceToken
     };
 
     // for test
