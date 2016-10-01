@@ -4,19 +4,22 @@
 -->
 <ion-content padding class="login">
   <center>
-    <img id="logo" src="images/logo_wh_lg.png">
+    <img id="logo" src="images/logo_red_lg.png">
 
-    <ion-list id="form_list">
+    <ion-list id="item_list">
       <ion-item id="item_email">
-        <ion-label fixed>Email</ion-label>
-        <ion-input type="text" value="" [(ngModel)]="email"></ion-input>
+        <ion-label stacked>이메일</ion-label>
+        <ion-input id="input_email" type="email" value="" [(ngModel)]="email"></ion-input>
       </ion-item>
       <ion-item id="item_password">
-        <ion-label fixed>Password</ion-label>
-        <ion-input type="password" value="" [(ngModel)]="password"></ion-input>
+        <ion-label stacked>비밀번호</ion-label>
+        <ion-input id="input_password" type="password" value="" [(ngModel)]="password" (keyup)="enter($event)"></ion-input>
       </ion-item>
     </ion-list>
+    
 
     <button full (click)="submit()" id="login_btn">로그인</button>
+    <br>
+    <p id="signup_comment">아직 회원이 아니신가요? <a id="signup_link" (click)="signup()">회원가입</a></p>
   </center>
 </ion-content>

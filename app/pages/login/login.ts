@@ -53,11 +53,11 @@ export class LoginPage {
           console.log(data.rows.item(0));
           this.email = data.rows.item(0).email;
           this.password = data.rows.item(0).password;
-
-          this.check();
-          Toast.show(this.email + '\r아이디로 로그인 되었습니다.', '3000', 'bottom').subscribe(
+          
+          this.submit();
+          Toast.show(this.email + '\r\n아이디로 로그인 되었습니다.', '3000', 'bottom').subscribe(
             toast => {
-              console.log(toast);
+              console.log('TOAST' + toast);
             }
           );
         }
@@ -104,44 +104,55 @@ export class LoginPage {
   }
 
   submit() {
-    this.check()
-        .then(res => {
-          // User confirm by Check api
-          if (res.result) {
-            console.log(res.result);
-            this.localUserCheck();
-            // open rails page with InAppBrowser.
-            let url = 'http://gangmom.kr/ionic_login?email=' + this.email + '&password=' + this.password;
-
-            // launch InAppBrowser
-            InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no,clearcache=yes,clearsessioncache=yes');
-          } else {
-            alert('login failed');
-          }
-        });
-  }
-
-  check() {
-    console.log(this.os);
     window['plugins'].OneSignal.getIds((ids) => {
       this.deviceToken = ids.userId;
+      // console.log(this.deviceToken);
+      let data = {
+        'email': this.email,
+        'password': this.password,
+        'deviceToken': this.deviceToken
+      };
+      // console.log(data);
+      this.check(data)
+          .then(res => {
+            // User confirm by Check api
+            if (res.result) {
+              console.log(res.result);
+              this.localUserCheck();
+              // open rails page with InAppBrowser.
+              // let url = 'http://gangmom.kr/ionic_login?email=' + this.email + '&password=' + this.password;
+              let url = 'http://localhost:3000/ionic_login?email=' + this.email + '&password=' + this.password;
+              if (this.os === 'Android') {
+                url = 'http://10.0.2.2:3000/ionic_login?email=' + this.email + '&password=' + this.password;
+              }
+
+              // launch InAppBrowser
+              InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no,clearcache=yes,clearsessioncache=yes');
+            } else {
+              alert('login failed');
+            }
+          });
     });
+  }
 
+  signup() {
+    let url = 'http://gangmom.kr/join_0_m';
+    InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no,clearcache=yes,clearsessioncache=yes'); 
+  }
+
+  check(data) {
     // access to rails api
-
     // production
-    let url = 'http://gangmom.kr/ionic_check';
-
-    // POST parameters
-    let data = {
-      'email': this.email,
-      'password': this.password,
-      'deviceToken': this.deviceToken
-    };
+    // let url = 'http://gangmom.kr/ionic_check';
+    let url = 'http://localhost:3000/ionic_check';
+    if (this.os === 'Android') {
+      url = 'http://10.0.2.2:3000/ionic_check';
+    }
 
     // for test
-    console.log(url);
-    console.log(data);
+    // console.log(this.os);
+    // console.log(url);
+    // console.log(data);
 
     let body = JSON.stringify(data);
     let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -151,5 +162,11 @@ export class LoginPage {
     return this.http.post(url, body, options)
                .toPromise()
                .then(response => response.json());
+  }
+
+  enter(event) {
+    if (event.keyCode === 13) {
+      this.submit();
+    }
   }
 }
