@@ -120,11 +120,11 @@ export class LoginPage {
               console.log(res.result);
               this.localUserCheck();
               // open rails page with InAppBrowser.
-              // let url = 'http://gangmom.kr/ionic_login?email=' + this.email + '&password=' + this.password;
-              let url = 'http://localhost:3000/ionic_login?email=' + this.email + '&password=' + this.password;
-              if (this.os === 'Android') {
-                url = 'http://10.0.2.2:3000/ionic_login?email=' + this.email + '&password=' + this.password;
-              }
+              let url = 'http://gangmom.kr/ionic_login?email=' + this.email + '&password=' + this.password;
+              // let url = 'http://localhost:3000/ionic_login?email=' + this.email + '&password=' + this.password;
+              // if (this.os === 'Android') {
+              //   url = 'http://10.0.2.2:3000/ionic_login?email=' + this.email + '&password=' + this.password;
+              // }
 
               // launch InAppBrowser
               InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no,clearcache=yes,clearsessioncache=yes');
@@ -143,16 +143,11 @@ export class LoginPage {
   check(data) {
     // access to rails api
     // production
-    // let url = 'http://gangmom.kr/ionic_check';
-    let url = 'http://localhost:3000/ionic_check';
-    if (this.os === 'Android') {
-      url = 'http://10.0.2.2:3000/ionic_check';
-    }
-
-    // for test
-    // console.log(this.os);
-    // console.log(url);
-    // console.log(data);
+    let url = 'http://gangmom.kr/ionic_check';
+    // let url = 'http://localhost:3000/ionic_check';
+    // if (this.os === 'Android') {
+    //   url = 'http://10.0.2.2:3000/ionic_check';
+    // }
 
     let body = JSON.stringify(data);
     let headers = new Headers({ 'Content-Type': 'application/json' });
