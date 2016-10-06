@@ -141,7 +141,7 @@ export class LoginPage {
 
   signup() {
     let url = 'http://gangmom.kr/join_0_m';
-    InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no,clearcache=yes,clearsessioncache=yes'); 
+    InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no,clearcache=yes,clearsessioncache=yes');
   }
 
   check(data) {
