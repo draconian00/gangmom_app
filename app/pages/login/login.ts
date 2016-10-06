@@ -129,7 +129,11 @@ export class LoginPage {
               // launch InAppBrowser
               InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no,clearcache=yes,clearsessioncache=yes');
             } else {
-              alert('login failed');
+              Toast.show('로그인을 실패했습니다.\r\n이메일과 비밀번호를 다시 확인해주세요.', '3000', 'bottom').subscribe(
+                toast => {
+                  console.log('TOAST' + toast);
+                }
+              );
             }
           });
     });
