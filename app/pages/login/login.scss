@@ -6,54 +6,63 @@
 	margin-top: 50px;
 }
 
-#item_list {
-	margin-top: 3rem;
+.hide {
+	display: none;
 }
 
-#item_email {
-	padding: 0px;
-	width: 95%;
-	border-top: none;
+#refresh_div {
+	margin-top: 120px;
 }
 
-#item_password {
-	padding: 0px;
-	width: 95%;
-	margin-bottom: 30px;
-}
-
-#login_btn {
+#refresh_btn {
 	background: #ca2128;
 	color: #fff;
-	width: 80%;
+	width: 40%;
 	font-size: 2rem;
 	font-weight: bold;
 	letter-spacing: 0.3rem;
 	border-radius: 10px;
 }
 
-#signup_comment {
+#refresh_comment {
 	font-size: 1.5rem;
 }
 
-#signup_link {
-	color: #ca2128;
+// ------------- loading spinner -------------
+
+$loadingSpinnerDiameter: 50px;
+$loadingSpinnerStrokeWidth: 5px;
+$loadingSpinnerStrokeColor: #ca2128;
+$loadingSpinnerOpacity: .8;
+$loadingSpinnerStrokeStyle: solid; // solid, dashed, dotted
+$loadingSpinnerSpeed: .9s;
+
+.loadingSpinner {
+  border: $loadingSpinnerStrokeWidth $loadingSpinnerStrokeStyle $loadingSpinnerStrokeColor;
+  border-top-color: rgba(0, 0, 0, 0);
+  border-left-color: rgba(0, 0, 0, 0);
+  width: $loadingSpinnerDiameter - ($loadingSpinnerStrokeWidth * 2);
+  height: $loadingSpinnerDiameter - ($loadingSpinnerStrokeWidth * 2);
+  opacity: $loadingSpinnerOpacity;
+  border-radius: 50%;
+  animation: loadingSpinner $loadingSpinnerSpeed infinite linear;
+  -webkit-animation: loadingSpinner $loadingSpinnerSpeed infinite linear;
 }
 
-ion-list .item-input.input-has-focus {
-	border-bottom-color: #ca2128 !important;
-	box-shadow: inset 0 -1px 0 0 #ca2128 !important;
+.loadingSpinner {
+  margin-top: -$loadingSpinnerDiameter / 2;
+  margin-left: -$loadingSpinnerDiameter / 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
 
-.item-input.input-has-focus .item-inner {
-	border-bottom-color: #ca2128 !important;
-	box-shadow: inset 0 -1px 0 0 #ca2128 !important;
+@keyframes loadingSpinner {
+    from { transform: rotate(0deg)   }
+    to   { transform: rotate(360deg) }
 }
 
-ion-label[stacked] {
-	font-size: 1.5rem;
-} 
-.input-has-focus ion-label[stacked] {
-	font-size: 1.5rem;
-	color: #ca2128;
+@-webkit-keyframes loadingSpinner {
+    from { -webkit-transform: rotate(0deg)   }
+    to   { -webkit-transform: rotate(360deg) }
 }

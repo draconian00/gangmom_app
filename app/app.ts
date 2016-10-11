@@ -5,7 +5,7 @@
 
 import { Component } from '@angular/core';
 import { Platform, ionicBootstrap } from 'ionic-angular';
-import { StatusBar, SQLite } from 'ionic-native';
+import { StatusBar, InAppBrowser, Device } from 'ionic-native';
 import { LoginPage } from './pages/login/login';
 
 
@@ -14,6 +14,7 @@ import { LoginPage } from './pages/login/login';
 })
 export class MyApp {
   public rootPage: any;
+  active_status: boolean = true;
 
   constructor(private platform: Platform) {
     this.rootPage = LoginPage;
@@ -23,23 +24,27 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
 
-      var notificationHandler = function(notification) {
+      // notification handler
+      var notificationHandler = (notification) => {
         console.log('didReceiveRemoteNotifiactionCallBack: ' + JSON.stringify(notification));
         let jsonData = notification.additionalData;
-        if (jsonData.title === 'SYSTEM' && jsonData.autoLogin === 'disabled') {
-          let db = new SQLite();
-          db.openDatabase({
-            name: 'gangmom.db',
-            location: 'default'
-          }).then(() => {
-            db.executeSql('DELETE FROM user', []).then(
-              () => console.log('DELETE success'),
-              (err) => console.error('DELETE ERROR', err)
-            );
+        if (jsonData.redirect_url) {
+          this.active_status = notification.isActive;
+          let inapp = InAppBrowser.open(jsonData.redirect_url, '_blank', 'location=no,toolbar=no,zoom=no,hidden=yes');
+          inapp.addEventListener('loadstop', () => {
+            inapp.show();
           });
+          // let open_confirm = confirm('리뷰 수정페이지로 이동하시겠습니까?');
+          // if (open_confirm) {
+          //   this.active_status = false;
+          //   InAppBrowser.open(jsonData.redirect_url, '_blank', 'location=no,toolbar=no,zoom=no');
+          // } else {
+          //   this.active_status = true;
+          // }
         }
       };
 
+      // setting onesignal
       window['plugins'].OneSignal.enableInAppAlertNotification(true);
       window['plugins'].OneSignal.enableSound(true);
       window['plugins'].OneSignal.enableVibrate(true);
@@ -47,11 +52,25 @@ export class MyApp {
       window['plugins'].OneSignal.enableInAppAlertNotification(true);
       window['plugins'].OneSignal.enableNotificationsWhenActive(true);
 
+      // onesignal init
       window['plugins'].OneSignal.init(
         '5db18f75-1e72-486d-a0db-82f902784dea', 
         {googleProjectNumber: '600441567099'},
         notificationHandler
       );
+
+      // get onesignal device token then => open inappbrowser 
+      window['plugins'].OneSignal.getIds((ids) => {
+        // test
+        // let url = 'http://localhost:3000/m?device_token=' + ids.userId;
+        let url = 'http://gangmom.kr/m?device_token=' + ids.userId;
+        if (this.active_status) {
+          let inapp = InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no,hidden=yes');
+          inapp.addEventListener('loadstop', () => {
+            inapp.show();
+          });
+        }
+      });
     });
   }
 }
