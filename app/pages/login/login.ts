@@ -4,7 +4,7 @@
 */
 
 import { Component } from '@angular/core';
-import { Platform, NavController } from 'ionic-angular';
+import { Platform, NavController, AlertController } from 'ionic-angular';
 import { InAppBrowser } from 'ionic-native';
 
 import { Http } from '@angular/http';
@@ -19,8 +19,8 @@ export class LoginPage {
   deviceToken: any;
   active_status: boolean = true;
 
-  constructor(public navCtrl: NavController, private http: Http, private platform: Platform) {
-    // app.ts 에서  InAppBrowser를 못 열었을때 login.html 에서 InAppBrowser를 열 수 있는 버튼 소환
+  constructor(public navCtrl: NavController, private http: Http, private platform: Platform, private alertCtrl: AlertController) {
+    // InAppBrowser를 못 열었을때 login.html 에서 InAppBrowser를 열 수 있는 버튼 소환
     setTimeout(() => {
       this.loadingComment_hide();
       this.refreshComment_show();
@@ -29,28 +29,21 @@ export class LoginPage {
     platform.ready().then(() => {
       // notification handler
       var notificationHandler = (notification) => {
-        // console.log('didReceiveRemoteNotifiactionCallBack: ' + JSON.stringify(notification));
+        console.log('didReceiveRemoteNotifiactionCallBack: ' + JSON.stringify(notification));
         let jsonData = notification.additionalData;
         if (jsonData.redirect_url) {
           this.refreshComment_hide();
           this.loadingComment_show();
           this.active_status = notification.isActive;
+
           let inapp = InAppBrowser.open(jsonData.redirect_url, '_blank', 'location=no,toolbar=no,zoom=no,hidden=yes');
           inapp.addEventListener('loadstop', () => {
             inapp.show();
             this.loadingComment_hide();
-            this.refreshComment_show();
+            this.refreshComment_show(); 
           });
         }
       };
-
-      // setting onesignal
-      window['plugins'].OneSignal.enableInAppAlertNotification(true);
-      window['plugins'].OneSignal.enableSound(true);
-      window['plugins'].OneSignal.enableVibrate(true);
-      window['plugins'].OneSignal.setSubscription(true);
-      window['plugins'].OneSignal.enableInAppAlertNotification(true);
-      window['plugins'].OneSignal.enableNotificationsWhenActive(true);
 
       // onesignal init
       window['plugins'].OneSignal.init(
@@ -58,6 +51,13 @@ export class LoginPage {
         {googleProjectNumber: '600441567099'},
         notificationHandler
       );
+
+      // setting onesignal
+      window['plugins'].OneSignal.enableSound(true);
+      window['plugins'].OneSignal.enableVibrate(true);
+      window['plugins'].OneSignal.setSubscription(true);
+      window['plugins'].OneSignal.enableInAppAlertNotification(true);
+      window['plugins'].OneSignal.enableNotificationsWhenActive(true);
 
       // get onesignal device token then => open inappbrowser 
       window['plugins'].OneSignal.getIds((ids) => {
