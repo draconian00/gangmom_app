@@ -4,13 +4,8 @@
 */
 
 import { Component } from '@angular/core';
-import { Platform, NavController, AlertController } from 'ionic-angular';
+import { Platform, NavController } from 'ionic-angular';
 import { InAppBrowser } from 'ionic-native';
-
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
-
-// declare var FCMplugin: any;
 
 @Component({
   templateUrl: 'build/pages/login/login.html',
@@ -18,8 +13,12 @@ import 'rxjs/add/operator/toPromise';
 export class LoginPage {
   deviceToken: any;
   active_status: boolean = true;
+  comment_status: boolean;
 
-  constructor(public navCtrl: NavController, private http: Http, private platform: Platform, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, private platform: Platform) {
+
+    let random = Math.random();
+    this.comment_status =  (random > 0.5) ? true : false;
     // InAppBrowser를 못 열었을때 login.html 에서 InAppBrowser를 열 수 있는 버튼 소환
     setTimeout(() => {
       this.loadingComment_hide();
@@ -80,12 +79,17 @@ export class LoginPage {
   }
 
   loadingComment_show() {
+    console.log(this.comment_status);
+    this.comment_status = !this.comment_status;
+    console.log(this.comment_status);
     document.getElementById('spinner').className = 'loadingSpinner';
     document.getElementById('loading_comment').className = '';
+    document.getElementById('ad_comment').className = '';
   }
   loadingComment_hide() {
     document.getElementById('spinner').className = 'loadingSpinner hide';
     document.getElementById('loading_comment').className = 'hide';
+    document.getElementById('ad_comment').className = 'hide';
   }
   refreshComment_show() {
     document.getElementById('refresh_comment').className = '';

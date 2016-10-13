@@ -29,7 +29,29 @@
 }
 
 #loading_comment {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+}
+
+@media screen and (max-height: 570px) {
+  #loading_comment {
+    margin-top: 160px;
+  }
+}
+
+@media screen and (max-height: 670px) {
+  #loading_comment {
+    margin-top: 180px;
+  }
+}
+
+@media screen and (max-height: 740px) {
+  #loading_comment {
+    margin-top: 200px;
+  }
+}
+
+#ad_comment {
+  font-size: 1.7rem;
   margin-top: 20px;
 }
 

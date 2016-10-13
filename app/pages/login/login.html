@@ -5,11 +5,18 @@
 <ion-content padding class="login">
   <center>
     <img id="logo" src="images/logo_red_lg.png">
-    <p id="loading_comment" class="">페이지 이동 중 입니다.</p>
+    <p id="ad_comment">
+      <span *ngIf="comment_status">학원 정보 플랫폼, 강남엄마</span>
+      <span *ngIf="!comment_status">옆집 엄마보다 강남엄마</span>
+    </p>
     <div id="spinner" class="loadingSpinner"></div>
     <div id="refresh_div">
       <p id="refresh_comment" class="hide">뭔가 잘못되었네요 ... !<br>페이지를 다시 열려면 아래 버튼을 눌러주세요.</p>
       <button (click)="openBrowser()" id="refresh_btn" class="hide">새로고침</button>
     </div>
+  </center>
+
+  <center id="loading_comment_wrapper">
+    <p id="loading_comment">페이지 이동 중 입니다.</p>
   </center>
 </ion-content>
