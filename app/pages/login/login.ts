@@ -31,9 +31,22 @@ export class LoginPage {
         console.log('didReceiveRemoteNotifiactionCallBack: ' + JSON.stringify(notification));
         let jsonData = notification.additionalData;
         if (jsonData.redirect_url) {
-          if (jsonData.actionSelected === '__DEFAULT__') {
-            console.log('select Close');
-          } else if (jsonData.actionSelected === 'open_url') {
+          if (notification.isActive) {
+            if (jsonData.actionSelected === '__DEFAULT__') {
+              console.log('select Close');
+            } else if (jsonData.actionSelected === 'open_url') {
+              this.refreshComment_hide();
+              this.loadingComment_show();
+              this.active_status = notification.isActive;
+
+              let inapp = InAppBrowser.open(jsonData.redirect_url, '_blank', 'location=no,toolbar=no,zoom=no,hidden=yes');
+              inapp.addEventListener('loadstop', () => {
+                inapp.show();
+                this.loadingComment_hide();
+                this.refreshComment_show(); 
+              });        
+            }
+          } else {
             this.refreshComment_hide();
             this.loadingComment_show();
             this.active_status = notification.isActive;
@@ -43,7 +56,7 @@ export class LoginPage {
               inapp.show();
               this.loadingComment_hide();
               this.refreshComment_show(); 
-            });        
+            });
           }
         } else if (jsonData.external_url) {
           if (jsonData.actionSelected === '__DEFAULT__') {
