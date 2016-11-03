@@ -61,7 +61,9 @@ export class LoginPage {
       // get onesignal device token then => open inappbrowser 
       window['plugins'].OneSignal.getIds((ids) => {
         this.deviceToken = ids.userId;
-        let url = 'http://gangmom.kr/m?device_token=' + this.deviceToken;
+        // let url = 'http://gangmom.kr/m?device_token=' + this.deviceToken;
+        // test
+        let url = 'http://localhost:3000/m?device_token=' + this.deviceToken;
         if (this.active_status) {
           let inapp = InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no,hidden=yes');
           inapp.addEventListener('loadstop', () => {
@@ -74,7 +76,9 @@ export class LoginPage {
 
   // launch InAppBrowser
   openBrowser() {
-    let url = 'http://gangmom.kr/m?device_token=' + this.deviceToken;
+    // let url = 'http://gangmom.kr/m?device_token=' + this.deviceToken;
+    // test
+    let url = 'http://localhost:3000/m?device_token=' + this.deviceToken;
     InAppBrowser.open(url, '_blank', 'location=no,toolbar=no,zoom=no');
   }
 
